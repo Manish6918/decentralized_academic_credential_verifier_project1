@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Credential</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        :root {
+            --success: #10b981;
+            --error: #ef4444;
+            --primary: #4f46e5;
+            --bg: #0f172a;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            color: #f8fafc;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated border glow */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        h2 { font-weight: 600; letter-spacing: -0.5px; margin-bottom: 2rem; }
+
+        /* Dynamic Message Styling */
+        .status-msg {
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            animation: slideDown 0.4s ease;
+        }
+        .msg-info { background: rgba(79, 70, 229, 0.1); border: 1px solid var(--primary); color: #c7d2fe; }
+
+        .verify-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        button:active { transform: translateY(0); }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover { color: white; }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🔍 Verify Credential</h2>
+
+    {% if message %}
+        <div class="status-msg msg-info">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <form method="POST" class="verify-form" id="verifyForm">
+        <input type="text" name="asset_id" placeholder="Enter Asset ID (e.g. ASSET-123)" required>
+        <button type="submit" id="submitBtn">Verify Authenticity</button>
+    </form>
+
+    <a href="/" class="back-btn">← Back to Portal</a>
+</div>
+
+<script>
+    // Simple interactivity: Change button text on click
+    const form = document.getElementById('verifyForm');
+    const btn = document.getElementById('submitBtn');
+
+    form.onsubmit = function() {
+        btn.innerHTML = "Scanning Database...";
+        btn.style.opacity = "0.7";
+    };
+</script>
+
+</body>
+</html>
